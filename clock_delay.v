@@ -1,10 +1,8 @@
-///// TODO
-// simulate
-
 module clock_delay(clk, data, q);
 
 // Parameter for width and delay generalization
-parameter width, cycles;
+parameter width=1;
+parameter cycles=1;
 
 // Assigning ports as in/out
 input clk;
@@ -12,12 +10,12 @@ input [width-1 : 0] data;
 output [width-1 : 0] q;
 
 // Instantiate the register train
-reg [cycles-1 : 0] D[0 : width-1];
+reg [width-1 : 0] D[0 : cycles-1];
 
 // Initialize this train to 0
 generate
 	genvar i;
-	for (i=0; i < cycles; i++)
+	for (i=0; i < cycles; i=i+1)
 	begin : gen1
 		initial
 			D[i] = {width{1'b0}};
@@ -25,15 +23,14 @@ generate
 endgenerate
 
 // Connect outputs
-assign q = D[cycles-1];
+assign q = D[cycles-1][width-1 : 0];
 
 // The Shifting part:
 generate
-	genvar i;
-	for (i=cycles-1; i>0; i--)
+	for (i=cycles-1; i>0; i=i-1)
 	begin : gen2
 		always @(posedge clk)
-			D[i] <= D[i-1];
+			D[i] = D[i-1];
 	end
 endgenerate
 
