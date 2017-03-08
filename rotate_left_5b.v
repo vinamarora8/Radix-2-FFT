@@ -1,6 +1,3 @@
-//// TODO
-// test
-
 module rotate_left_5b(din, S, clk, clr, dout);
 
 // Assigning ports as input/output
