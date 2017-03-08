@@ -1,6 +1,3 @@
-//// TODO
-// test
-
 module incrementer(din, clk, clr, dout);
 
 // Parameter definition for varying bit-width
@@ -13,16 +10,16 @@ output reg [width-1 : 0] dout;
 
 // Initializing registers
 initial
-	dout <= {(width-1){1'b0}, 1'b1};
+	dout <= {{(width-1){1'b0}}, 1'b1};
 
 // Creating instantaneous incremented data
-wire dout_buf = din + {(width-1){1'b0}, 1'b1};
+wire [width-1 : 0] dout_buf = din + {{(width-1){1'b0}}, 1'b1};
 
 // Incrementer action:
 always @(posedge clk)
 begin
 	if (clr)
-		dout <= {(width-1){1'b0}, 1'b1};
+		dout <= {{(width-1){1'b0}}, 1'b1};
 	else
 		dout <= dout_buf;
 end
