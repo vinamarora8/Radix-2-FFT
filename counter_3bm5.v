@@ -1,6 +1,3 @@
-//// TODO
-// test
-
 module counter_3bm5 (
 	input clk,
 	input sclr,
@@ -25,7 +22,7 @@ module counter_3bm5 (
 	always @(posedge clk)
 	begin
 		// Synchronous clear and Modulus
-		if (sclr == 1'b1 || count == 4'b1000)
+		if (sclr == 1'b1 || count == 4'b100)
 			count = 4'b0000;
 		// Else count up
 		else
