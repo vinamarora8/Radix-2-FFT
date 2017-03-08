@@ -20,3 +20,5 @@ begin
 	else if (r)
 		q <= 1'b0;
 end
+
+endmodule
