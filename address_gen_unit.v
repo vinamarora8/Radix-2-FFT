@@ -1,6 +1,4 @@
 //// TODO
-// Clear_Hold connections
-// Mem_write delay connections
 // Test
 
 module address_gen_unit(start_ff, clk, mema_address, memb_address, twiddle_address, mem_write, fft_done);
@@ -145,3 +143,59 @@ sync_SR_latch(
 	.c(1'b1),
 	.q(running)
 	);
+
+// Clear_hold delay connections
+wire inverted_start_fft_pulse = ~start_fft_pulse;
+wire d_inv_running;
+wire dd_inv_running;
+wire ddd_inv_running;
+D_latch clear_delay1(
+	.clk(clk),
+	.d(~running),
+	.p(inverted_start_fft_pulse),
+	.c(1'b1),
+	.q(d_inv_running)
+	);
+D_latch clear_delay2(
+	.clk(clk),
+	.d(d_inv_running),
+	.p(inverted_start_fft_pulse),
+	.c(1'b1),
+	.q(dd_inv_running)
+	);
+D_latch clear_delay3(
+	.clk(clk),
+	.d(dd_inv_running),
+	.p(1'b1),
+	.c(1'b1),
+	.q(ddd_inv_running)
+	);
+D_latch clear_delay4(
+	.clk(clk),
+	.d(ddd_inv_running),
+	.p(1'b1),
+	.c(1'b1),
+	.q(clear_hold)
+	);
+
+// Mem write delay connections
+wire d_mem_write;
+D_latch mem_write_delay1(
+	.clk(clk),
+	.d(donot_hold_write & running),
+	.p(1'b1),
+	.c(~dd_inv_running),
+	.q(d_mem_write)
+	);
+D_latch mem_write_delay2(
+	.clk(clk),
+	.d(d_mem_write),
+	.p(1'b1),
+	.c(~dd_inv_running),
+	.q(mem_write)
+	);
+
+// FFT Done connections
+assign fft_done = clear_hold & (~running);
+
+endmodule 
