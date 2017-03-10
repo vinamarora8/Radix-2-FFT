@@ -26,20 +26,20 @@ counter_4b index_counter(
 	);
 
 // Clock delay connections
-wire [4:0] 2j;
+wire [4:0] jx2;
 clock_delay #(5, 1) wait_for_incrementer(
 	.clk(clk),
 	.data({index_val, 1'b0}),
-	.q(2j)
+	.q(jx2)
 	);
 
 // Incrementer connections
-wire [4:0] 2j_1;
+wire [4:0] jx2_1;
 incrementer inc_index_before_rotation(
 	.clk(clk),
 	.din({index_val, 1'b0}),
 	.clr(clear_hold),
-	.dout(2j_1)
+	.dout(jx2_1)
 	);
 
 // Level counter connections
@@ -63,14 +63,14 @@ counter_3bm5 level_counter(
 wire [2:0] delayed_i;
 clock_delay #(3, 1) level_counter_delay(
 	.clk(clk),
-	.data(i);
+	.data(i),
 	.q(delayed_i)
 	);
 
 // MemA_address calculator block
 rotate_left_5b mema_address_calculator(
 	.clk(clk),
-	.din(2j),
+	.din(jx2),
 	.S(delayed_i),
 	.clr(clear_hold),
 	.dout(mema_address)
@@ -79,7 +79,7 @@ rotate_left_5b mema_address_calculator(
 // MemB_address calculator block
 rotate_left_5b memb_address_calculator(
 	.clk(clk),
-	.din(2j_1),
+	.din(jx2_1),
 	.S(delayed_i),
 	.clr(clear_hold),
 	.dout(memb_address)
@@ -136,7 +136,7 @@ wire start_fft_pulse = d_start_fft & (~dd_start_fft);
 // Start/Stop controller
 wire running;
 sync_SR_latch(
-	.clk(clk),<F12>
+	.clk(clk),
 	.s(start_fft_pulse),
 	.r(index_counter_cout & level_counter_cout),
 	.p(1'b1),
