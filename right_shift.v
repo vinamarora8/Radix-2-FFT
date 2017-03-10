@@ -1,6 +1,3 @@
-//// TODO
-// test
-
 module right_shift(s_in, clk, clr, dout);
 
 parameter width = 4;
