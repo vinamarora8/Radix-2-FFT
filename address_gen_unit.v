@@ -1,10 +1,11 @@
 //// TODO
 // Test
 
-module address_gen_unit(start_ff, clk, mema_address, memb_address, twiddle_address, mem_write, fft_done);
+module address_gen_unit(start_fft, clk, mema_address, memb_address, twiddle_address, mem_write, fft_done);
 
 // Assigning ports as input/output
-input start_ff;
+input start_fft;
+input clk;
 output [4:0] mema_address;
 output [4:0] memb_address;
 output [3:0] twiddle_address;
@@ -55,7 +56,7 @@ wire [2:0] i;
 wire level_counter_cout;
 counter_3bm5 level_counter(
 	.clk(level_counter_clk),
-	.clr(clear_hold),
+	.sclr(clear_hold),
 	.out(i),
 	.cout(level_counter_cout)
 	);
@@ -105,7 +106,7 @@ counter_4b write_hold_counter(
 	);
 
 // Write hold controller connections
-sync_SR_latch write_hold_controller(i
+sync_SR_latch write_hold_controller(
 	.clk(clk),
 	.s(index_counter_cout),
 	.r(write_hold_counter_cout),
