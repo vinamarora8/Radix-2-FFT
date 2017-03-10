@@ -1,6 +1,6 @@
 //// TODO
-// Twiddle factor calculator
-// Start FFT connections
+// Clear_Hold connections
+// Mem_write delay connections
 // Test
 
 module address_gen_unit(start_ff, clk, mema_address, memb_address, twiddle_address, mem_write, fft_done);
@@ -61,7 +61,6 @@ counter_3bm5 level_counter(
 	.out(i),
 	.cout(level_counter_cout)
 	);
-
 // Level counter delay connections
 wire [2:0] delayed_i;
 clock_delay #(3, 1) level_counter_delay(
@@ -86,4 +85,63 @@ rotate_left_5b memb_address_calculator(
 	.S(delayed_i),
 	.clr(clear_hold),
 	.dout(memb_address)
+	);
+
+// Twiddle Factor address calculator connections
+wire [3:0] mask;
+right_shift #(4) twiddle_factor_mask_generator(
+	.clk(clk),
+	.s_in(1'b1),
+	.clr(clear_hold),
+	.dout(mask)
+	);
+assign twiddle_address = mask & index_val;
+
+// Write hold counter connections
+wire write_hold_counter_cout;
+wire donot_hold_write = ~hold_write;
+counter_4b write_hold_counter(
+	.clk(clk),
+	.sclr(donot_hold_write),
+	.cout(write_hold_counter_cout)
+	);
+
+// Write hold controller connections
+sync_SR_latch write_hold_controller(i
+	.clk(clk),
+	.s(index_counter_cout),
+	.r(write_hold_counter_cout),
+	.p(1'b1),
+	.c(1'b1),
+	.q(hold_write)
+	);
+
+// Start_FFT pulse connections
+wire d_start_fft;
+wire dd_start_fft;
+D_latch start_fft_delay1(
+	.clk(clk),
+	.d(start_fft),
+	.p(1'b1),
+	.c(1'b1),
+	.q(d_start_fft)
+	);
+D_latch start_fft_delay2(
+	.clk(clk),
+	.d(d_start_fft),
+	.p(1'b1),
+	.c(1'b1),
+	.q(dd_start_fft)
+	);
+wire start_fft_pulse = d_start_fft & (~dd_start_fft);
+
+// Start/Stop controller
+wire running;
+sync_SR_latch(
+	.clk(clk),<F12>
+	.s(start_fft_pulse),
+	.r(index_counter_cout & level_counter_cout),
+	.p(1'b1),
+	.c(1'b1),
+	.q(running)
 	);
