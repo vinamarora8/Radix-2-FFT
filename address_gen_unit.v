@@ -89,7 +89,7 @@ rotate_left_5b memb_address_calculator(
 // Twiddle Factor address calculator connections
 wire [3:0] mask;
 right_shift #(4) twiddle_factor_mask_generator(
-	.clk(clk),
+	.clk(level_counter_clk),
 	.s_in(1'b1),
 	.clr(clear_hold),
 	.dout(mask)
@@ -185,14 +185,14 @@ D_latch mem_write_delay1(
 	.clk(clk),
 	.d(donot_hold_write & running),
 	.p(1'b1),
-	.c(~dd_inv_running),
+	.c(~clear_hold),
 	.q(d_mem_write)
 	);
 D_latch mem_write_delay2(
 	.clk(clk),
 	.d(d_mem_write),
 	.p(1'b1),
-	.c(~dd_inv_running),
+	.c(~clear_hold),
 	.q(mem_write)
 	);
 
