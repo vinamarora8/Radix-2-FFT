@@ -22,8 +22,13 @@ module counter_3bm5 (
 	always @(posedge clk)
 	begin
 		// Synchronous clear and Modulus
-		if (sclr == 1'b1 || count == 4'b100)
+		if (sclr == 1'b1)
 			count = 4'b0000;
+		// Cout management
+		else if (count == 4'b0100)
+		begin
+			count = 4'b1000;
+		end
 		// Else count up
 		else
 			count = count + 1'b1;
