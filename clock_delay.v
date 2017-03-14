@@ -1,11 +1,11 @@
-module clock_delay(clk, data, q);
+module clock_delay(clk, data, clr, q);
 
 // Parameter for width and delay generalization
 parameter width=1;
 parameter cycles=1;
 
 // Assigning ports as in/out
-input clk;
+input clk, clr;
 input [width-1 : 0] data;
 output [width-1 : 0] q;
 
@@ -30,12 +30,23 @@ generate
 	for (i=cycles-1; i>0; i=i-1)
 	begin : gen2
 		always @(posedge clk)
+		begin
 			D[i] = D[i-1];
+			
+			// Handling Sync Clear
+			if (clr)
+				D[i] = {width{1'b0}};
+		end
 	end
 endgenerate
 
 always @(posedge clk)
+begin
 	D[0] = data;
-
+	
+	// Handling Clear
+	if (clr)
+		D[0] = {width{1'b0}};
+end
 endmodule
 
