@@ -8,7 +8,7 @@ output reg [width-1 : 0] dout;
 
 // Initializing registers
 initial
-	dout <= {(width-1){1'b0}};
+	dout <= {width{1'b0}};
 
 // Right-Shift action:
 // Shifting all the bits, less the last
@@ -28,7 +28,7 @@ begin
 	
 	// Takes care of synchronous clear
 	if (clr)
-		dout <= {(width-1){1'b0}};
+		dout <= {width{1'b0}};
 end
 
 endmodule
