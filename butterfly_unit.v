@@ -14,8 +14,8 @@ multiplier complex_twiddle_xb(
 	.clk(clk),
 	.ar(b_in[63:32]),
 	.ai(b_in[31:0]),
-	.br({16{twiddle_factor[31]}, twiddle_factor[30:16], 1'b0}),
-	.bi({16{twiddle_factor[15]}, twiddle_factor[14:0], 1'b0}),
+	.br({{16{twiddle_factor[31]}}, twiddle_factor[30:16], 1'b0}),
+	.bi({{16{twiddle_factor[15]}}, twiddle_factor[14:0], 1'b0}),
 	.pr(product[63:32]),
 	.pi(product[31:0])
 	);
