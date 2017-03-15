@@ -1,5 +1,4 @@
 //// TODO
-// Subtractor
 // Test
 
 module butterfly_unit(clk, a_in, b_in, twiddle_factor, a_out, b_out);
@@ -37,7 +36,7 @@ adder a_out_real_adder(
 	.b(product[63:32]),
 	.s(a_out[63:32])
 	);
-adder a_out_imag(
+adder a_out_imag_adder(
 	.clk(clk),
 	.a(d_a_in[31:0]),
 	.b(product[31:0]),
@@ -45,3 +44,17 @@ adder a_out_imag(
 	);
 
 // Subtractor connections
+subtractor b_out_real_sub(
+	.clk(clk),
+	.a(d_a_in[63:32]),
+	.b(product[63:32]),
+	.s(b_out[63:32])
+	);
+subtractor b_out_imag_sub(
+	.clk(clk),
+	.a(d_a_in[31:0]),
+	.b(product[31:0]),
+	.s(b_out[31:0])
+	);
+
+endmodule 
