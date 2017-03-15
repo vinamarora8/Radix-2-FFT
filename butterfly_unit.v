@@ -1,0 +1,30 @@
+module butterfly_unit(clk, a_in, b_in, twiddle_factor, a_out, b_out);
+
+// Assigning ports as input/ouput
+input [63:0] a_in, b_in;
+input [31:0] twiddle_factor;
+output [63:0] a_out, b_out;
+
+// Multiplier connections
+wire [63:0] product;
+multiplier complex_twiddle_xb(
+	.clk(clk),
+	.ar(b_in[63:32]),
+	.ai(b_in[31:0]),
+	.br({16{twiddle_factor[31]}, twiddle_factor[30:16], 1'b0}),
+	.bi({16{twiddle_factor[15]}, twiddle_factor[14:0], 1'b0}),
+	.pr(product[63:32]),
+	.pi(product[31:0])
+	);
+
+// Delay connections
+wire [63:0] d_a_in;
+clock_delay #(64, 7) multiplier_delay(
+	.clk(clk),
+	.data(a_in),
+	.clr(1'b0),
+	.q(d_a_in)
+	);
+
+// Adder connections
+
