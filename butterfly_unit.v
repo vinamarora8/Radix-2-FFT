@@ -1,3 +1,7 @@
+//// TODO
+// Subtractor
+// Test
+
 module butterfly_unit(clk, a_in, b_in, twiddle_factor, a_out, b_out);
 
 // Assigning ports as input/ouput
@@ -27,4 +31,17 @@ clock_delay #(64, 7) multiplier_delay(
 	);
 
 // Adder connections
+adder a_out_real_adder(
+	.clk(clk),
+	.a(d_a_in[63:32]),
+	.b(product[63:32]),
+	.s(a_out[63:32])
+	);
+adder a_out_imag(
+	.clk(clk),
+	.a(d_a_in[31:0]),
+	.b(product[31:0]),
+	.s(a_out[31:0])
+	);
 
+// Subtractor connections
