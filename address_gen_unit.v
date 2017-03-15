@@ -1,6 +1,3 @@
-//// TODO
-// Test
-
 module address_gen_unit(start_fft, clk, mema_address, memb_address, twiddle_address, mem_write, fft_done);
 
 // Assigning ports as input/output
@@ -31,6 +28,7 @@ wire [4:0] jx2;
 clock_delay #(5, 1) wait_for_incrementer(
 	.clk(clk),
 	.data({index_val, 1'b0}),
+	.clr(clear_hold),
 	.q(jx2)
 	);
 
@@ -65,6 +63,7 @@ wire [2:0] delayed_i;
 clock_delay #(3, 1) level_counter_delay(
 	.clk(clk),
 	.data(i),
+	.clr(clear_hold),
 	.q(delayed_i)
 	);
 
@@ -88,13 +87,26 @@ rotate_left_5b memb_address_calculator(
 
 // Twiddle Factor address calculator connections
 wire [3:0] mask;
+wire d_level_counter_clk;
+clock_delay #(1,1) mask_gen_clk_delay(
+	.clk(clk),
+	.data(level_counter_clk),
+	.clr(clear_hold),
+	.q(d_level_counter_clk)
+	);
 right_shift #(4) twiddle_factor_mask_generator(
-	.clk(level_counter_clk),
+	.clk(d_level_counter_clk),
 	.s_in(1'b1),
 	.clr(clear_hold),
 	.dout(mask)
 	);
-assign twiddle_address = mask & index_val;
+wire [3:0] nd_twiddle_address = mask & index_val;
+clock_delay #(4,2) twiddle_coutput_delay_box(
+	.clk(clk),
+	.data(nd_twiddle_address),
+	.clr(clear_hold),
+	.q(twiddle_address)
+	);
 
 // Write hold counter connections
 wire write_hold_counter_cout;
@@ -136,7 +148,7 @@ wire start_fft_pulse = d_start_fft & (~dd_start_fft);
 
 // Start/Stop controller
 wire running;
-sync_SR_latch(
+sync_SR_latch start_stop_controller(
 	.clk(clk),
 	.s(start_fft_pulse),
 	.r(index_counter_cout & level_counter_cout),
@@ -181,18 +193,19 @@ D_latch clear_delay4(
 
 // Mem write delay connections
 wire d_mem_write;
+wire mem_write_clear = ~(hold_write || clear_hold);
 D_latch mem_write_delay1(
 	.clk(clk),
 	.d(donot_hold_write & running),
 	.p(1'b1),
-	.c(~clear_hold),
+	.c(mem_write_clear),
 	.q(d_mem_write)
 	);
 D_latch mem_write_delay2(
 	.clk(clk),
 	.d(d_mem_write),
 	.p(1'b1),
-	.c(~clear_hold),
+	.c(mem_write_clear),
 	.q(mem_write)
 	);
 
