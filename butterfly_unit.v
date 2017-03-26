@@ -4,6 +4,7 @@
 module butterfly_unit(clk, a_in, b_in, twiddle_factor, a_out, b_out);
 
 // Assigning ports as input/ouput
+input clk;
 input [63:0] a_in, b_in;
 input [31:0] twiddle_factor;
 output [63:0] a_out, b_out;
