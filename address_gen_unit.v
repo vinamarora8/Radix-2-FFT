@@ -214,18 +214,11 @@ D_latch mem_write_delay2(
 assign fft_done = clear_hold & (~running);
 
 // Bank Select connections
-wire d_bank_select;
 T_flipflop bank_selector(
-	.clk(index_counter_cout),
+	.clk(mem_write),
 	.T(1'b1),
 	.p(1'b1),
 	.c(~clear_hold),
-	.q(d_bank_select)
-	);
-clock_delay #(1,2) bank_selector_delay(
-	.clk(clk),
-	.data(d_bank_select),
-	.clr(clear_hold),
 	.q(bank_select)
 	);
 
