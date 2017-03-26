@@ -14,9 +14,9 @@ begin
 		q = ~q;
 
 	// Taking care of sync preset and clear
-	if(p)
+	if(~p)
 		q = 1'b1;
-	else if(c)
+	else if(~c)
 		q = 1'b0;
 end
 
