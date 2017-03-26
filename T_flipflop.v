@@ -10,14 +10,13 @@ initial q = 1'b0;
 // T-flipflop action
 always @(posedge clk)
 begin
-	if(T)
-		q = ~q;
-
-	// Taking care of sync preset and clear
 	if(~p)
 		q = 1'b1;
 	else if(~c)
 		q = 1'b0;
+	else if(T)
+		q = ~q;
+	
 end
 
 endmodule 
