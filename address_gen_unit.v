@@ -1,4 +1,4 @@
-module address_gen_unit(start_fft, clk, mema_address, memb_address, twiddle_address, mem_write, fft_done);
+module address_gen_unit(start_fft, clk, mema_address, memb_address, twiddle_address, mem_write, fft_done, bank_select);
 
 // Assigning ports as input/output
 input start_fft;
@@ -8,6 +8,7 @@ output [4:0] memb_address;
 output [3:0] twiddle_address;
 output mem_write;
 output fft_done;
+output bank_select;
 
 // Clear Hold wire
 wire clear_hold;
@@ -211,5 +212,21 @@ D_latch mem_write_delay2(
 
 // FFT Done connections
 assign fft_done = clear_hold & (~running);
+
+// Bank Select connections
+wire d_bank_select;
+T_flipflop bank_selector(
+	.clk(index_counter_cout),
+	.T(1'b1),
+	.p(1'b1),
+	.c(~clear_hold),
+	.q(d_bank_select)
+	);
+clock_delay #(1,2) bank_selector_delay(
+	.clk(clk),
+	.data(d_bank_select),
+	.clr(clear_hold),
+	.q(bank_select)
+	);
 
 endmodule 
