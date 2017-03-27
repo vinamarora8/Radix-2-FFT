@@ -22,11 +22,18 @@ address_gen_unit address_generator(
 	);
 
 // Twiddle Factor ROM connections
+wire [31:0] d_twiddle_factor;
 wire [31:0] twiddle_factor;
 twiddle_factor_ROM twiddle_factors(
 	.clka(clk),
 	.addra(twiddle_address),
-	.douta(twiddle_factor)
+	.douta(d_twiddle_factor)
+	);
+clock_delay #(32, 2) (
+	.clk(clk),
+	.data(d_twiddle_factor),
+	.clr(1'b0),
+	.q(twiddle_factor)
 	);
 
 // Butterfly Unit connections
