@@ -72,14 +72,27 @@ clock_delay #(1, 9) mem_write_delay(
 	);
 
 // Connections to memory_2_bank
+// With wire reversals
+wire [4:0] rev_mema_address;
+wire [4:0] rev_memb_address;
+
+generate
+	genvar i;
+	for (i = 0; i<5; i = i+1)
+	begin: gen1
+		assign rev_mema_address[i] = mema_address[4-i];
+		assign rev_memb_address[i] = memb_address[4-i];
+	end
+endgenerate
+
 memory_2_bank main_mem(
 	.clk(clk),
-	.select(bank_select),
+	.select(~bank_select),
 	.write_enable(d_mem_write),
 	.addw_1(d_mema_address),
 	.addw_2(d_memb_address),
-	.addr_1(mema_address),
-	.addr_2(memb_address),
+	.addr_1(rev_mema_address),
+	.addr_2(rev_memb_address),
 	.din_1(a_out),
 	.din_2(b_out),
 	.dout_1(a_in),
