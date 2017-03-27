@@ -24,7 +24,7 @@ address_gen_unit address_generator(
 // Twiddle Factor ROM connections
 wire [31:0] twiddle_factor;
 twiddle_factor_ROM twiddle_factors(
-	.clka(clka),
+	.clka(clk),
 	.addra(twiddle_address),
 	.douta(twiddle_factor)
 	);
@@ -48,19 +48,19 @@ wire d_mem_write;
 clock_delay #(5, 9) mema_address_delay(
 	.clk(clk),
 	.data(mema_address),
-	.clr(clear_hold),
+	.clr(1'b0),
 	.q(d_mema_address)
 	);
 clock_delay #(5, 9) memb_address_delay(
 	.clk(clk),
 	.data(memb_address),
-	.clr(clear_hold),
+	.clr(1'b0),
 	.q(d_memb_address)
 	);
 clock_delay #(1, 9) mem_write_delay(
 	.clk(clk),
 	.data(mem_write),
-	.clr(clear_hold),
+	.clr(1'b0),
 	.q(d_mem_write)
 	);
 
