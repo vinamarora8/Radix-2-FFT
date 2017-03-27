@@ -14,7 +14,7 @@ output [63:0] dout_1, dout_2;
 wire [4:0] addA_1 = (select) ? addr_1 : addw_1;
 wire [4:0] addA_2 = (select) ? addr_2 : addw_2;
 wire [63:0] doutA_1, doutA_2;
-block_RAM bank1(
+block_RAM_init bank1(
 	.clka(clk),
 	.clkb(clk),
 	.wea((select)&(write_enable)),
@@ -32,7 +32,7 @@ block_RAM bank1(
 wire [4:0] addB_1 = (select) ? addw_1 : addr_1;
 wire [4:0] addB_2 = (select) ? addw_2 : addr_2;
 wire [63:0] doutB_1, doutB_2;
-block_RAM bank2(
+block_RAM	 bank2(
 	.clka(clk),
 	.clkb(clk),
 	.wea((~select)&(write_enable)),
