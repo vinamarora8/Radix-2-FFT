@@ -29,7 +29,7 @@ twiddle_factor_ROM twiddle_factors(
 	.addra(twiddle_address),
 	.douta(d_twiddle_factor)
 	);
-clock_delay #(32, 2) (
+clock_delay #(32, 2) twiddle_factor_delay(
 	.clk(clk),
 	.data(d_twiddle_factor),
 	.clr(1'b0),

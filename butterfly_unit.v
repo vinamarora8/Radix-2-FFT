@@ -9,14 +9,18 @@ input [63:0] a_in, b_in;
 input [31:0] twiddle_factor;
 output [63:0] a_out, b_out;
 
+// Twiddle Factor 1 approximation
+wire [31:0] twiddle_factor_real = (twiddle_factor[31:16] == 16'h7fff) ? 32'h00010000 : {{16{twiddle_factor[31]}}, twiddle_factor[30:16], 1'b0};
+wire [31:0] twiddle_factor_imaginary = (twiddle_factor[15:0] == 16'h7fff) ? 32'h00010000 : {{16{twiddle_factor[15]}}, twiddle_factor[14:0], 1'b0};
+
 // Multiplier connections
 wire [63:0] product;
 multiplier complex_twiddle_xb(
 	.clk(clk),
 	.ar(b_in[63:32]),
 	.ai(b_in[31:0]),
-	.br({{16{twiddle_factor[31]}}, twiddle_factor[30:16], 1'b0}),
-	.bi({{16{twiddle_factor[15]}}, twiddle_factor[14:0], 1'b0}),
+	.br(twiddle_factor_real),
+	.bi(twiddle_factor_imaginary),
 	.pr(product[63:32]),
 	.pi(product[31:0])
 	);
