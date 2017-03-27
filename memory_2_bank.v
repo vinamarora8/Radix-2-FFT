@@ -10,7 +10,7 @@ input [63:0] din_1, din_2;
 output [63:0] dout_1, dout_2;
 
 //// Connections for memA
-// Write to A if select == 0
+// Write to A if select == 1
 wire [4:0] addA_1 = (select) ? addr_1 : addw_1;
 wire [4:0] addA_2 = (select) ? addr_2 : addw_2;
 wire [63:0] doutA_1, doutA_2;
@@ -28,7 +28,7 @@ block_RAM bank1(
 	);
 
 //// Connections for memB
-// Write to B if select == 1
+// Write to B if select == 0
 wire [4:0] addB_1 = (select) ? addw_1 : addr_1;
 wire [4:0] addB_2 = (select) ? addw_2 : addr_2;
 wire [63:0] doutB_1, doutB_2;
@@ -46,7 +46,7 @@ block_RAM bank2(
 	);
 
 // Connections for data out
-assign dout_1 = (select) ? doutA_1 : doutB_1;
-assign dout_2 = (select) ? doutA_2 : doutB_2;
+assign dout_1 = (select) ? doutB_1 : doutA_1;
+assign dout_2 = (select) ? doutB_2 : doutA_2;
 
 endmodule
