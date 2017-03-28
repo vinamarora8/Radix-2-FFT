@@ -43,7 +43,7 @@ sync_SR_latch comp_latch(
 	.clk(clk),
 	.s(start_pulse),
 	.r(~(mema_data == memb_data)),
-	.p(running),
+	.p(~start_pulse),
 	.c(1'b1),
 	.q(q)
 	);
