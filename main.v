@@ -1,8 +1,26 @@
-module main(clk, start, done, check_q);
+module main(clk, start_sw, unlock, done, check_q);
 
 // Assigning ports as in/out
-input clk, start;
+input clk, start_sw, unlock;
 output done, check_q;
+
+//// Start_sw -> Start conversion
+reg lock;
+initial lock = 1'b0;
+
+always @(posedge clk)
+begin
+	if ((~lock) & start_sw)
+	begin
+		lock = 1'b1;
+	end
+	else if (lock & unlock)
+	begin	
+		lock = 1'b0;
+	end	
+end
+
+wire start = (lock) ? 1'b0 : start_sw;
 
 // FFT connections
 wire fft_done;
