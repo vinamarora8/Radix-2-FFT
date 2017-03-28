@@ -22,18 +22,12 @@ address_gen_unit address_generator(
 	);
 
 // Twiddle Factor ROM connections
-wire [31:0] d_twiddle_factor;
+//wire [31:0] d_twiddle_factor;
 wire [31:0] twiddle_factor;
 twiddle_factor_ROM twiddle_factors(
 	.clka(clk),
 	.addra(twiddle_address),
-	.douta(d_twiddle_factor)
-	);
-clock_delay #(32, 2) twiddle_factor_delay(
-	.clk(clk),
-	.data(d_twiddle_factor),
-	.clr(1'b0),
-	.q(twiddle_factor)
+	.douta(twiddle_factor)
 	);
 
 // Butterfly Unit connections
@@ -52,19 +46,19 @@ butterfly_unit butterfly(
 // Taking care of write delay
 wire [4:0] d_mema_address, d_memb_address;
 wire d_mem_write;
-clock_delay #(5, 9) mema_address_delay(
+clock_delay #(5, 10) mema_address_delay(
 	.clk(clk),
 	.data(mema_address),
 	.clr(1'b0),
 	.q(d_mema_address)
 	);
-clock_delay #(5, 9) memb_address_delay(
+clock_delay #(5, 10) memb_address_delay(
 	.clk(clk),
 	.data(memb_address),
 	.clr(1'b0),
 	.q(d_memb_address)
 	);
-clock_delay #(1, 9) mem_write_delay(
+clock_delay #(1, 10) mem_write_delay(
 	.clk(clk),
 	.data(mem_write),
 	.clr(1'b0),
@@ -72,27 +66,14 @@ clock_delay #(1, 9) mem_write_delay(
 	);
 
 // Connections to memory_2_bank
-// With wire reversals
-wire [4:0] rev_mema_address;
-wire [4:0] rev_memb_address;
-
-generate
-	genvar i;
-	for (i = 0; i<5; i = i+1)
-	begin: gen1
-		assign rev_mema_address[i] = mema_address[4-i];
-		assign rev_memb_address[i] = memb_address[4-i];
-	end
-endgenerate
-
 memory_2_bank main_mem(
 	.clk(clk),
 	.select(~bank_select),
 	.write_enable(d_mem_write),
 	.addw_1(d_mema_address),
 	.addw_2(d_memb_address),
-	.addr_1(rev_mema_address),
-	.addr_2(rev_memb_address),
+	.addr_1(mema_address),
+	.addr_2(memb_address),
 	.din_1(a_out),
 	.din_2(b_out),
 	.dout_1(a_in),
