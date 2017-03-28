@@ -1,8 +1,8 @@
-module main(clk, start_sw, unlock, done, check_q);
+module main(clk, start_sw, unlock, fft_done, done, check_q);
 
 // Assigning ports as in/out
 input clk, start_sw, unlock;
-output done, check_q;
+output done, check_q, fft_done;
 
 //// Start_sw -> Start conversion
 reg lock;
@@ -33,7 +33,6 @@ clock_delay #(1,1) start_extension_delay(
 wire start = small_start | d_small_start;
 
 // FFT connections
-wire fft_done;
 wire [4:0] fft_mem_address;
 wire [63:0] fft_mem_data;
 fft radix2_fft_system(
