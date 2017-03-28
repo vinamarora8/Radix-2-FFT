@@ -20,7 +20,17 @@ begin
 	end	
 end
 
-wire start = (lock) ? 1'b0 : start_sw;
+wire small_start = (lock) ? 1'b0 : start_sw;
+// Extending this start signal
+wire d_small_start;
+clock_delay #(1,2) start_extension_delay(
+	.clk(clk),
+	.data(small_start),
+	.clr(1'b0),
+	.q(d_small_start)
+	);
+
+wire start = small_start | d_small_start;
 
 // FFT connections
 wire fft_done;
