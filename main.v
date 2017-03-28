@@ -23,7 +23,7 @@ end
 wire small_start = (lock) ? 1'b0 : start_sw;
 // Extending this start signal
 wire d_small_start;
-clock_delay #(1,2) start_extension_delay(
+clock_delay #(1,1) start_extension_delay(
 	.clk(clk),
 	.data(small_start),
 	.clr(1'b0),
