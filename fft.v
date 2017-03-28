@@ -1,9 +1,11 @@
-module fft(clk, start_fft, fft_done);
+module fft(clk, start_fft, fft_done, mem_address, mem_data);
 
 // Assigning ports as input/output
 input clk;
 input start_fft;
+input [4:0] mem_address;
 output fft_done;
+output [63:0] mem_data;
 
 // AGU connections
 wire bank_select;
@@ -66,18 +68,20 @@ clock_delay #(1, 10) mem_write_delay(
 	);
 
 // Connections to memory_2_bank
+wire [4:0] modified_addressa = (fft_done) ? mem_address : mema_address;
 memory_2_bank main_mem(
 	.clk(clk),
-	.select(~bank_select),
+	.select((~bank_select) | fft_done),
 	.write_enable(d_mem_write),
 	.addw_1(d_mema_address),
 	.addw_2(d_memb_address),
-	.addr_1(mema_address),
+	.addr_1(modified_addressa),
 	.addr_2(memb_address),
 	.din_1(a_out),
 	.din_2(b_out),
 	.dout_1(a_in),
 	.dout_2(b_in)
 	);
+assign mem_data = a_in;
 
 endmodule
