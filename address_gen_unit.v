@@ -54,7 +54,7 @@ D_latch level_counter_clk_latch(
 wire [2:0] i;
 wire level_counter_cout;
 counter_3bm5 level_counter(
-	.clk(level_counter_clk),
+	.clk(level_counter_clk | start_fft_pulse),
 	.sclr(clear_hold),
 	.out(i),
 	.cout(level_counter_cout)
