@@ -53,6 +53,7 @@ D_latch level_counter_clk_latch(
 	);
 wire [2:0] i;
 wire level_counter_cout;
+wire start_fft_pulse;
 counter_3bm5 level_counter(
 	.clk(level_counter_clk | start_fft_pulse),
 	.sclr(clear_hold),
@@ -145,7 +146,7 @@ D_latch start_fft_delay2(
 	.c(1'b1),
 	.q(dd_start_fft)
 	);
-wire start_fft_pulse = d_start_fft & (~dd_start_fft);
+assign start_fft_pulse = d_start_fft & (~dd_start_fft);
 
 // Start/Stop controller
 wire running;
