@@ -31,7 +31,7 @@ sync_SR_latch run_controller(
 	);
 
 // Address counter connections
-counter_4b address_counter(
+counter_5b address_counter(
 	.clk(clk),
 	.sclr(~running),
 	.out(mem_address),
@@ -53,7 +53,7 @@ wire d_running;
 clock_delay #(1, 3) comp_done_delay(
 	.clk(clk),
 	.data(running),
-	.clr(1'b1),
+	.clr(1'b0),
 	.q(d_running)
 	);
 assign comp_done = ~(running | d_running);
