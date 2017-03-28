@@ -1,0 +1,8 @@
+NET "clk" LOC = "C9" | IOSTANDARD = LVCMOS33;
+NET "start_sw" LOC = "H13" | IOSTANDARD = LVTTL | PULLDOWN;
+NET "unlock" LOC = "K17" | IOSTANDARD = LVTTL | PULLDOWN;
+NET "fft_done" LOC = "F9" | IOSTANDARD = LVTTL;
+NET "done" LOC = "E9" | IOSTANDARD = LVTTL;
+NET "check_q" LOC = "D11" | IOSTANDARD = LVTTL;
+
+//clk, start_sw, unlock, fft_done, done, check_q
