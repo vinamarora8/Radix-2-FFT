@@ -11,8 +11,8 @@ output [63:0] dout_1, dout_2;
 
 //// Connections for memA
 // Write to A if select == 1
-wire [4:0] addA_1 = (select) ? addr_1 : addw_1;
-wire [4:0] addA_2 = (select) ? addr_2 : addw_2;
+wire [4:0] addA_1 = (select) ? addw_1 : addr_1;
+wire [4:0] addA_2 = (select) ? addw_2 : addr_2;
 wire [63:0] doutA_1, doutA_2;
 block_RAM_init bank1(
 	.clka(clk),
@@ -29,8 +29,8 @@ block_RAM_init bank1(
 
 //// Connections for memB
 // Write to B if select == 0
-wire [4:0] addB_1 = (select) ? addw_1 : addr_1;
-wire [4:0] addB_2 = (select) ? addw_2 : addr_2;
+wire [4:0] addB_1 = (select) ? addr_1 : addw_1;
+wire [4:0] addB_2 = (select) ? addr_2 : addw_2;
 wire [63:0] doutB_1, doutB_2;
 block_RAM	 bank2(
 	.clka(clk),
